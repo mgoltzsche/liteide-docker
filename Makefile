@@ -1,5 +1,4 @@
-LITEIDE_VERSION?=x36
-IMAGE=mgoltzsche/liteide:${LITEIDE_VERSION}
+IMAGETAG?=x36
 
 build:
-	docker build -t ${IMAGE} .
+	docker build -t mgoltzsche/liteide:${IMAGETAG} .

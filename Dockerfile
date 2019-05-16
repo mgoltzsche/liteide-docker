@@ -7,11 +7,14 @@ RUN ./update_pkg.sh
 RUN QTDIR=/usr/lib/qt5 ./build_linux.sh
 
 FROM golang:1.12-alpine
-RUN apk add --update --no-cache qt5-qtbase-x11 qt5-qtwebkit libcanberra-gtk3 adwaita-icon-theme ttf-dejavu
+RUN apk add --update --no-cache qt5-qtbase-x11 qt5-qtwebkit libcanberra-gtk3 adwaita-icon-theme ttf-dejavu git
 COPY --from=build /go/liteide/build/liteide /opt/liteide
-RUN mkdir /work
-WORKDIR /work
-ENV PATH=/go/bin:/usr/local/go/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/liteide/bin
-ENV GOPATH=/work DISPLAY=:0 HOME=/tmp/liteide
+ENV PATH=/go/bin:/usr/local/go/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/liteide/bin \
+	GOROOT=/usr/local/go DISPLAY=:0 HOME=/opt/liteide/home
+RUN go get golang.org/x/tools/cmd/godoc golang.org/x/lint/golint \
+	&& rm -rf /opt/liteide/home/.cache \
+	&& chmod -R go+wt /opt/liteide/home \
+		/opt/liteide/share/liteide/liteenv \
+		/go
 ENTRYPOINT ["/opt/liteide/bin/liteide"]
-CMD ["/work"]
+CMD ["/go"]
