@@ -15,16 +15,16 @@ Docker directly.
 
 Install the launcher script on your host:
 ```
-curl -fsSL https://raw.githubusercontent.com/mgoltzsche/liteide-docker/master/liteide.sh -o /tmp/liteide &&
-chmod +x /tmp/liteide &&
-sudo mv /tmp/liteide /usr/local/bin/liteide
+curl -fsSL https://raw.githubusercontent.com/mgoltzsche/liteide-docker/master/liteide.sh -o /tmp/run-liteide &&
+chmod +x /tmp/run-liteide &&
+sudo mv /tmp/run-liteide /usr/local/bin/run-liteide
 ```
 
 ### Launcher script usage
 
 The launcher can be used as follows:
 ```
-liteide PROJECTDIR [PACKAGE]
+run-liteide PROJECTDIR [PACKAGE]
 ```
 
 | Argument     | Description |
