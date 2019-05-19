@@ -15,8 +15,8 @@ DOCKER_OPT=
 [ ! "$LITEIDE_INI" ] || DOCKER_OPT="$DOCKER_OPT --mount 'type=bind,src=${LITEIDE_INI},dst=/tmp/.config/liteide/liteide.ini'"
 
 docker run -d --name liteide --rm \
-	-u $(id -u):$(id -g) \
 	-e DISPLAY="${DISPLAY}" \
+	-e CHUSR=$(id -u):$(id -g) \
 	--mount type=bind,src=/tmp/.X11-unix,dst=/tmp/.X11-unix \
 	--mount type=bind,src=/etc/machine-id,dst=/etc/machine-id \
 	--mount "type=bind,src=${PRJDIR},dst=/go/${PKG}" \

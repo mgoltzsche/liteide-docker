@@ -44,7 +44,7 @@ run-liteide PROJECTDIR [PACKAGE]
 In order to run a container using this image directly you need to
 provide several options:
 
-- provide your host UID/GID (`-u`) in order to make LiteIDE write as your user (not required when using [podman](https://podman.io/))
+- provide your host UID/GID as `CHOWN` environment variable in order to run LiteIDE as your user (not required when using [podman](https://podman.io/))
 - pass through your host's `DISPLAY` environment variable
 - mount your host's `/etc/machine-id`
 - mount your project directory into the container's `/go` directory (`GOPATH` points to `/go`)
@@ -53,7 +53,7 @@ provide several options:
 Example:
 ```
 docker run --name liteide --rm \
-	-u $(id -u):$(id -g) \
+	-e CHUSR=$(id -u):$(id -g) \
 	-e DISPLAY="${DISPLAY}" \
 	--mount type=bind,src=/tmp/.X11-unix,dst=/tmp/.X11-unix \
 	--mount type=bind,src=/etc/machine-id,dst=/etc/machine-id \
