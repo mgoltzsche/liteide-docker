@@ -7,7 +7,7 @@ RUN ./update_pkg.sh
 RUN QTDIR=/usr/lib/qt5 ./build_linux.sh
 
 FROM golang:1.12-alpine
-RUN apk add --update --no-cache qt5-qtbase-x11 qt5-qtwebkit libcanberra-gtk3 adwaita-icon-theme ttf-dejavu git
+RUN apk add --update --no-cache qt5-qtbase-x11 qt5-qtwebkit libcanberra-gtk3 adwaita-icon-theme ttf-dejavu git gcc musl-dev
 COPY --from=build /go/liteide/build/liteide /opt/liteide
 ENV PATH=/go/bin:/usr/local/go/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/liteide/bin \
 	GOROOT=/usr/local/go DISPLAY=:0 HOME=/opt/liteide/home
