@@ -28,6 +28,11 @@ RUN set -x \
 	&& gosu nobody true \
 	&& apk del --purge gnupg
 
+# Add Go 1.11 module environment (go.mod support)
+RUN cd /opt/liteide/share/liteide/liteenv \
+	&& cp system.env system-go111module.env \
+	&& echo GO111MODULE=on >> system-go111module.env
+
 ADD entrypoint.sh /
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["/go"]
