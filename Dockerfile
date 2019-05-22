@@ -7,7 +7,7 @@ RUN ./update_pkg.sh
 RUN QTDIR=/usr/lib/qt5 ./build_linux.sh
 
 FROM golang:1.12-alpine
-RUN apk add --update --no-cache qt5-qtbase-x11 qt5-qtwebkit libcanberra-gtk3 adwaita-icon-theme ttf-dejavu git gcc musl-dev
+RUN apk add --update --no-cache qt5-qtbase-x11 qt5-qtwebkit libcanberra-gtk3 adwaita-icon-theme ttf-dejavu git gcc musl-dev bash
 COPY --from=build /go/liteide/build/liteide /opt/liteide
 ENV PATH=/go/bin:/usr/local/go/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/liteide/bin \
 	GOROOT=/usr/local/go DISPLAY=:0 HOME=/opt/liteide/home
@@ -28,10 +28,8 @@ RUN set -x \
 	&& gosu nobody true \
 	&& apk del --purge gnupg
 
-# Add Go 1.11 module environment (go.mod support)
-RUN cd /opt/liteide/share/liteide/liteenv \
-	&& cp system.env system-go111module.env \
-	&& echo GO111MODULE=on >> system-go111module.env
+# Enable Go 1.11 module support (go.mod file)
+ENV GO111MODULE=on
 
 ADD entrypoint.sh /
 ENTRYPOINT ["/entrypoint.sh"]
