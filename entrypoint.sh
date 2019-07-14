@@ -3,6 +3,7 @@
 CHUSR="${CHUSR:-0:0}"
 chown -R "$CHUSR" "$HOME" /opt/liteide/share/liteide/liteenv &&
 find /go -type d -exec chown "$CHUSR" {} + || exit 1
+[ ! -d "$1/vendor" ] || export GOFLAGS="-mod=vendor $GOFLAGS"
 
 gosu "$CHUSR" sh -c "HOME='$HOME' /opt/liteide/bin/liteide $@" &
 PID=$!

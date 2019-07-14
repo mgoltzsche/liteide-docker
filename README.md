@@ -37,6 +37,7 @@ run-liteide PROJECTDIR [PACKAGE]
 | `LITEIDE_INI`     | Path to a `liteide.ini` file that should be used. Default: `$PROJECTDIR/liteide.ini` |
 | `LITEIDE_VERSION` | LiteIDE version |
 | `LITEIDE_IMAGE`   | full LiteIDE Docker image name (overwrites `LITEIDE_VERSION`) |
+| `LITEIDE_CACHE`   | if set to `on` the directory `.liteide-cache` is mounted to the container's `GOPATH` |
 
 
 ### Using Docker directly (optional)
