@@ -1,9 +1,16 @@
 #!/bin/sh
 
+set -e
+
 CHUSR="${CHUSR:-0:0}"
-chown -R "$CHUSR" "$HOME" /opt/liteide/share/liteide/liteenv &&
-find /go -type d -exec chown "$CHUSR" {} + || exit 1
-[ ! -d "$1/vendor" ] || export GOFLAGS="-mod=vendor $GOFLAGS"
+chown -R "$CHUSR" "$HOME" /opt/liteide/share/liteide/liteenv
+find /go -type d -exec chown "$CHUSR" {} +
+
+if [ -d "$1/vendor" ]; then
+	export GOFLAGS="-mod=vendor $GOFLAGS"
+elif [ -f "$1/go.mod" ]; then
+	export GO111MODULE=${GO111MODULE:-on}
+fi
 
 gosu "$CHUSR" sh -c "HOME='$HOME' /opt/liteide/bin/liteide $@" &
 PID=$!
