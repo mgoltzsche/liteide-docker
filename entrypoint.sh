@@ -7,7 +7,7 @@ chown -R "$CHUSR" "$HOME" /opt/liteide/share/liteide/liteenv
 find /go -type d -exec chown "$CHUSR" {} +
 
 if [ -d "$1/vendor" ]; then
-	export GOFLAGS="-mod=vendor $GOFLAGS"
+	export GOFLAGS="${GOFLAGS:--mod=vendor}"
 elif [ -f "$1/go.mod" ]; then
 	export GO111MODULE=${GO111MODULE:-on}
 fi
