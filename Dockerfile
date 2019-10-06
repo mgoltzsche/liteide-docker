@@ -1,6 +1,6 @@
 FROM golang:1.12-alpine AS build
 RUN apk add --update --no-cache git make g++ qt5-qttools qt5-qtbase-dev qt5-qtbase-x11 qt5-qtwebkit xkeyboard-config
-ARG LITEIDE_VERSION=x36
+ARG LITEIDE_VERSION=x36.1
 RUN git clone -b "${LITEIDE_VERSION}" --single-branch https://github.com/visualfc/liteide.git
 WORKDIR /go/liteide/build
 RUN ./update_pkg.sh
@@ -16,7 +16,7 @@ RUN go get golang.org/x/tools/cmd/godoc golang.org/x/lint/golint \
 	&& mv /go/bin/* /usr/local/bin/
 
 # Add gosu for easy stepdown from root
-ENV GOSU_VERSION 1.10
+ENV GOSU_VERSION 1.11
 RUN set -x \
 	&& apk add --update --no-cache gnupg \
 	&& wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-amd64" \
