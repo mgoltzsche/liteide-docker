@@ -5,12 +5,12 @@
 
 set -e
 
-LITEIDE_VERSION="${LITEIDE_VERSION:-x36.2}"
+LITEIDE_VERSION="${LITEIDE_VERSION:-x36.3}"
 LITEIDE_IMAGE="${LITEIDE_IMAGE:-mgoltzsche/liteide:$LITEIDE_VERSION}"
 PRJDIR="$(cd ${1:-${GOPATH:-.}} && pwd)"
 PKG="src/${2:-$(basename $PRJDIR)}"
 if [ $# -eq 1 ] && [ -f "$PRJDIR/go.mod" ]; then
-	PKG="$(grep -Em1 '^module\s+.*' "$PRJDIR/go.mod" | sed -E 's/^module\s+//')"
+	PKG="src/$(grep -Em1 '^module\s+.*' "$PRJDIR/go.mod" | sed -E 's/^module\s+//')"
 fi
 LITEIDE_INI="${LITEIDE_INI:-}"
 DOCKER_OPT=

@@ -7,7 +7,6 @@ set -e
 DIROWNER="$(stat -c '%u' "$1")"
 CHUSR="${CHUSR:-$DIROWNER}"
 chown "$CHUSR" "$HOME" /opt/liteide/share/liteide/liteenv/* /go
-#find /go -type d -user 0 -exec chown "$CHUSR" {} +
 
 if [ -d "$1/vendor" ]; then
 	export GOFLAGS="${GOFLAGS:--mod=vendor}"

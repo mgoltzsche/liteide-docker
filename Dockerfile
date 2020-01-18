@@ -1,6 +1,6 @@
 FROM golang:1.13-alpine AS build
 RUN apk add --update --no-cache git make g++ qt5-qttools qt5-qtbase-dev qt5-qtbase-x11 qt5-qtwebkit xkeyboard-config
-ARG LITEIDE_VERSION=x36.2
+ARG LITEIDE_VERSION=x36.3
 RUN git clone -b "${LITEIDE_VERSION}" --single-branch https://github.com/visualfc/liteide.git
 WORKDIR /go/liteide/build
 RUN ./update_pkg.sh
