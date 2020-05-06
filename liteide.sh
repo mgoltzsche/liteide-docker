@@ -5,7 +5,7 @@
 
 set -e
 
-LITEIDE_VERSION="${LITEIDE_VERSION:-x36.3}"
+LITEIDE_VERSION="${LITEIDE_VERSION:-x37}"
 LITEIDE_IMAGE="${LITEIDE_IMAGE:-mgoltzsche/liteide:$LITEIDE_VERSION}"
 PRJDIR="$(cd ${1:-${GOPATH:-.}} && pwd)"
 PKG="src/${2:-$(basename $PRJDIR)}"
