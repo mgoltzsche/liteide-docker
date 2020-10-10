@@ -1,4 +1,4 @@
-IMAGETAG?=x37.1
+IMAGETAG?=x37.3
 
 build:
 	docker build -t mgoltzsche/liteide:${IMAGETAG} .

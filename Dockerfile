@@ -1,19 +1,12 @@
-FROM golang:1.14-alpine3.11 AS build
+FROM golang:1.14-alpine3.12 AS build
 RUN apk add --update --no-cache git make g++ qt5-qttools qt5-qtbase-dev qt5-qtbase-x11 qt5-qtwebkit xkeyboard-config
-ARG LITEIDE_VERSION=x37.1
+ARG LITEIDE_VERSION=x37.3
 RUN git clone -b "${LITEIDE_VERSION}" --single-branch https://github.com/visualfc/liteide.git
 WORKDIR /go/liteide/build
-# Workaround for https://github.com/kafeg/ptyqt/issues/3
-RUN set -e; \
-	echo '#ifndef _PATH_UTMPX' > ptypatch.txt; \
-	echo '#include <sys/time.h>' >> ptypatch.txt; \
-	echo '# define _PATH_UTMPX	"/var/log/utmp"' >> ptypatch.txt; \
-	echo '#endif' >> ptypatch.txt; \
-	sed -i '/#include <QSocketNotifier>/r ptypatch.txt' ../liteidex/src/3rdparty/ptyqt/core/unixptyprocess.h
 RUN ./update_pkg.sh
 RUN QTDIR=/usr/lib/qt5 ./build_linux.sh
 
-FROM golang:1.14-alpine3.11
+FROM golang:1.14-alpine3.12
 
 # Add gosu for easy stepdown from root
 ENV GOSU_VERSION 1.11
