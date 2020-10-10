@@ -10,7 +10,7 @@ LITEIDE_IMAGE="${LITEIDE_IMAGE:-mgoltzsche/liteide:$LITEIDE_VERSION}"
 PRJDIR="$(cd ${1:-${GOPATH:-.}} && pwd)"
 PKG="src/${2:-$(basename $PRJDIR)}"
 if [ $# -eq 1 ] && [ -f "$PRJDIR/go.mod" ]; then
-	PKG="src/$(grep -Em1 '^module\s+.*' "$PRJDIR/go.mod" | sed -E 's/^module\s+//')"
+	PKG="src/$(grep -Em1 '^module\s+.*' "$PRJDIR/go.mod" | sed -E -e 's/^module\s+//' -e 's/\/v[0-9]+$//')"
 fi
 LITEIDE_INI="${LITEIDE_INI:-}"
 DOCKER_OPT=
@@ -22,8 +22,8 @@ DOCKER_OPT=
 	|| DOCKER_OPT="$DOCKER_OPT -v ${PRJDIR}/.liteide-cache:/go"
 
 docker run -d --name "liteide-$(basename $PRJDIR)" --rm \
+	--network host \
 	-e DISPLAY="${DISPLAY}" \
-	-e CHUSR=$(id -u):$(id -g) \
 	--mount type=bind,src=/tmp/.X11-unix,dst=/tmp/.X11-unix \
 	--mount type=bind,src=/etc/machine-id,dst=/etc/machine-id \
 	$DOCKER_OPT \
