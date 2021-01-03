@@ -3,6 +3,8 @@
 [ $# -gt 0 -a $# -le 2 ] \
 	|| (echo "Usage: $0 PROJECTDIR [PACKAGE]"; false) || exit 1
 
+DOCKER="$(podman -v 2>&1 >/dev/null && echo podman || echo docker)"
+
 set -e
 
 LITEIDE_VERSION="${LITEIDE_VERSION:-x37.3}"
@@ -21,7 +23,7 @@ DOCKER_OPT=
 ! ([ -d "$PRJDIR"/.liteide-cache ] || [ "$LITEIDE_CACHE" = on ]) \
 	|| DOCKER_OPT="$DOCKER_OPT -v ${PRJDIR}/.liteide-cache:/go"
 
-docker run -d --name "liteide-$(basename $PRJDIR)" --rm \
+$DOCKER run -d --name "liteide-$(basename $PRJDIR)" --rm \
 	--network host \
 	-e DISPLAY="${DISPLAY}" \
 	--mount type=bind,src=/tmp/.X11-unix,dst=/tmp/.X11-unix \
