@@ -78,8 +78,8 @@ to lock the build path as follows:
 
 If you want keep your configuration across IDE restarts or ship it with
 your project you need to enter the LiteIDE Docker container and copy 
-`/tmp/liteide/.config/liteide/liteide.ini` to your project dir at
-`/go/liteide.ini`.
+`/opt/liteide/home/.config/liteide/liteide.ini` to your project dir at
+`./.liteide.ini`.
 
 
 ## License

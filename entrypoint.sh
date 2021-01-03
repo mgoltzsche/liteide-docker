@@ -14,6 +14,10 @@ elif [ -f "$1/go.mod" ]; then
 	export GO111MODULE=${GO111MODULE:-on}
 fi
 
+if [ -f /opt/liteide/home/.config/liteide/liteide.ini.default ]; then
+	cp -f /opt/liteide/home/.config/liteide/liteide.ini.default /opt/liteide/home/.config/liteide/liteide.ini
+fi
+
 gosu "$CHUSR" sh -c "HOME='$HOME' /opt/liteide/bin/liteide '$1'" &
 PID=$!
 
