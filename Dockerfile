@@ -1,12 +1,12 @@
-FROM golang:1.14-alpine3.12 AS build
+FROM golang:1.15-alpine3.13 AS build
 RUN apk add --update --no-cache git make g++ qt5-qttools qt5-qtbase-dev qt5-qtbase-x11 qt5-qtwebkit xkeyboard-config
-ARG LITEIDE_VERSION=x37.3
+ARG LITEIDE_VERSION=x37.4
 RUN git clone -b "${LITEIDE_VERSION}" --single-branch https://github.com/visualfc/liteide.git
 WORKDIR /go/liteide/build
 RUN ./update_pkg.sh
 RUN QTDIR=/usr/lib/qt5 ./build_linux.sh
 
-FROM golang:1.14-alpine3.12
+FROM golang:1.15-alpine3.13
 
 # Add gosu for easy stepdown from root
 ENV GOSU_VERSION 1.11

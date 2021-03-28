@@ -32,4 +32,3 @@ $DOCKER run -d --name "liteide-$(basename $PRJDIR)" --rm \
 	--mount "type=bind,src=${PRJDIR},dst=/go/${PKG}" \
 	"${LITEIDE_IMAGE}" \
 	"/go/${PKG}"
-
