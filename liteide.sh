@@ -3,7 +3,7 @@
 [ $# -gt 0 -a $# -le 2 ] \
 	|| (echo "Usage: $0 PROJECTDIR [PACKAGE]"; false) || exit 1
 
-DOCKER="$(podman -v 2>&1 >/dev/null && echo podman || echo docker)"
+DOCKER="$( (podman -v 2>&1) >/dev/null && echo podman || echo docker)"
 
 set -e
 
