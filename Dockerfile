@@ -1,7 +1,7 @@
 FROM golang:1.15-alpine3.13 AS build
 RUN apk add --update --no-cache git make g++ qt5-qttools qt5-qtbase-dev qt5-qtbase-x11 qt5-qtwebkit xkeyboard-config
 ARG LITEIDE_VERSION=x37.4
-RUN git clone -b "${LITEIDE_VERSION}" --single-branch https://github.com/visualfc/liteide.git
+RUN git -c 'advice.detachedHead=false' clone -b "${LITEIDE_VERSION}" --single-branch https://github.com/visualfc/liteide.git
 WORKDIR /go/liteide/build
 RUN ./update_pkg.sh
 RUN QTDIR=/usr/lib/qt5 ./build_linux.sh
@@ -27,7 +27,7 @@ COPY --from=build /go/liteide/build/liteide /opt/liteide
 ENV PATH=/go/bin:/usr/local/go/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/liteide/bin \
 	GOROOT=/usr/local/go DISPLAY=:0 HOME=/opt/liteide/home
 RUN set -ex; \
-	go get golang.org/x/tools/cmd/godoc golang.org/x/lint/golint; \
+	go get -u golang.org/x/tools/cmd/godoc golang.org/x/lint/golint github.com/go-delve/delve/cmd/dlv; \
 	rm -rf /opt/liteide/home/.cache /go/src/*; \
 	mv /go/bin/* /usr/local/bin/; \
 	rm -rf /go/*
