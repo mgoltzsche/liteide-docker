@@ -1,12 +1,20 @@
-FROM golang:1.15-alpine3.13 AS build
+FROM golang:1.16-alpine3.13 AS build
 RUN apk add --update --no-cache git make g++ qt5-qttools qt5-qtbase-dev qt5-qtbase-x11 qt5-qtwebkit xkeyboard-config
 ARG LITEIDE_VERSION=x37.4
-RUN git -c 'advice.detachedHead=false' clone -b "${LITEIDE_VERSION}" --single-branch https://github.com/visualfc/liteide.git
-WORKDIR /go/liteide/build
+ARG GOTOOLS_VERSION=v1.3.5
+ARG GOCODE_VERSION=v1.3.2
+ARG GOMODIFYTAGS_VERSION=v1.13.0
+RUN git -c 'advice.detachedHead=false' clone -b "${LITEIDE_VERSION}" --single-branch https://github.com/visualfc/liteide.git /liteide-src
+WORKDIR /liteide-src/build
 RUN ./update_pkg.sh
+# Get Go tools because `build_linux.sh` requires them and `update_pkg.sh` silently failed to build the older versions when using a newer Go version.
+# See https://github.com/visualfc/liteide#update-liteide-tools-for-support-new-golang-version
+RUN git -c 'advice.detachedHead=false' clone -b "${GOTOOLS_VERSION}" --single-branch https://github.com/visualfc/gotools.git /liteide-src/liteidex/src/github.com/visualfc/gotools
+RUN git -c 'advice.detachedHead=false' clone -b "${GOCODE_VERSION}" --single-branch https://github.com/visualfc/gocode.git /liteide-src/liteidex/src/github.com/visualfc/gocode
+RUN git -c 'advice.detachedHead=false' clone -b "${GOMODIFYTAGS_VERSION}" --single-branch https://github.com/fatih/gomodifytags.git /liteide-src/liteidex/src/github.com/fatih/gomodifytags
 RUN QTDIR=/usr/lib/qt5 ./build_linux.sh
 
-FROM golang:1.15-alpine3.13
+FROM golang:1.16-alpine3.13
 
 # Add gosu for easy stepdown from root
 ENV GOSU_VERSION 1.11
@@ -23,9 +31,11 @@ RUN set -ex; \
 	apk del --purge gnupg
 
 RUN apk add --update --no-cache qt5-qtbase-x11 qt5-qtwebkit libcanberra-gtk3 adwaita-icon-theme ttf-dejavu git gcc gdb musl-dev linux-headers make bash curl
-COPY --from=build /go/liteide/build/liteide /opt/liteide
+COPY --from=build /liteide-src/build/liteide /opt/liteide
 ENV PATH=/go/bin:/usr/local/go/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/liteide/bin \
-	GOROOT=/usr/local/go DISPLAY=:0 HOME=/opt/liteide/home
+	GOROOT=/usr/local/go \
+	HOME=/opt/liteide/home \
+	DISPLAY=:0
 RUN set -ex; \
 	go get -u golang.org/x/tools/cmd/godoc golang.org/x/lint/golint github.com/go-delve/delve/cmd/dlv; \
 	rm -rf /opt/liteide/home/.cache /go/src/*; \
