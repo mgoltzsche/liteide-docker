@@ -30,7 +30,7 @@ RUN set -ex; \
 	gosu nobody true; \
 	apk del --purge gnupg
 
-RUN apk add --update --no-cache qt5-qtbase-x11 qt5-qtwebkit libcanberra-gtk3 adwaita-icon-theme ttf-dejavu git gcc gdb musl-dev linux-headers make bash curl
+RUN apk add --update --no-cache qt5-qtbase-x11 qt5-qtwebkit libcanberra-gtk3 adwaita-icon-theme ttf-dejavu git gcc gdb musl-dev linux-headers make bash curl gcompat libc6-compat
 COPY --from=build /liteide-src/build/liteide /opt/liteide
 ENV PATH=/go/bin:/usr/local/go/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/liteide/bin \
 	GOROOT=/usr/local/go \
