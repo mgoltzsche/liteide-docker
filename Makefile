@@ -1,4 +1,4 @@
-IMAGETAG?=latest
+IMAGE?=docker.io/mgoltzsche/liteide
 
 build:
-	docker build -t mgoltzsche/liteide:${IMAGETAG} .
+	docker build -t "$(IMAGE)" .
