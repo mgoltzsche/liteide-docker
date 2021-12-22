@@ -1,9 +1,9 @@
-FROM golang:1.16-alpine3.13 AS build
+FROM golang:1.17-alpine3.14 AS build
 RUN apk add --update --no-cache git make g++ qt5-qttools qt5-qtbase-dev qt5-qtbase-x11 qt5-qtwebkit xkeyboard-config
 ARG LITEIDE_VERSION=x37.4
-ARG GOTOOLS_VERSION=v1.3.5
+ARG GOTOOLS_VERSION=v1.3.6
 ARG GOCODE_VERSION=v1.3.2
-ARG GOMODIFYTAGS_VERSION=v1.13.0
+ARG GOMODIFYTAGS_VERSION=v1.16.0
 RUN git -c 'advice.detachedHead=false' clone -b "${LITEIDE_VERSION}" --single-branch https://github.com/visualfc/liteide.git /liteide-src
 WORKDIR /liteide-src/build
 RUN ./update_pkg.sh
@@ -14,7 +14,7 @@ RUN git -c 'advice.detachedHead=false' clone -b "${GOCODE_VERSION}" --single-bra
 RUN git -c 'advice.detachedHead=false' clone -b "${GOMODIFYTAGS_VERSION}" --single-branch https://github.com/fatih/gomodifytags.git /liteide-src/liteidex/src/github.com/fatih/gomodifytags
 RUN QTDIR=/usr/lib/qt5 ./build_linux.sh
 
-FROM golang:1.16-alpine3.13
+FROM golang:1.17-alpine3.14
 
 # Add gosu for easy stepdown from root
 ENV GOSU_VERSION 1.11
@@ -23,7 +23,7 @@ RUN set -ex; \
 	wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-amd64"; \
 	wget -O /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-amd64.asc"; \
 	export GNUPGHOME="$(mktemp -d)"; \
-	gpg --keyserver ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4; \
+	gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4; \
 	gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu; \
 	rm -rf "$GNUPGHOME" /usr/local/bin/gosu.asc || rm -rf "$GNUPGHOME" /usr/local/bin/gosu.asc; \
 	chmod +x /usr/local/bin/gosu; \
@@ -37,7 +37,8 @@ ENV PATH=/go/bin:/usr/local/go/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:
 	HOME=/opt/liteide/home \
 	DISPLAY=:0
 RUN set -ex; \
-	go get -u golang.org/x/tools/cmd/godoc golang.org/x/lint/golint github.com/go-delve/delve/cmd/dlv; \
+	go install golang.org/x/tools/cmd/godoc@v0.1.8; \
+	go install github.com/go-delve/delve/cmd/dlv@v1.7.3; \
 	rm -rf /opt/liteide/home/.cache /go/src/*; \
 	mv /go/bin/* /usr/local/bin/; \
 	rm -rf /go/*
