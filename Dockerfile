@@ -14,10 +14,10 @@ RUN git -c 'advice.detachedHead=false' clone -b "${GOCODE_VERSION}" --single-bra
 RUN git -c 'advice.detachedHead=false' clone -b "${GOMODIFYTAGS_VERSION}" --single-branch https://github.com/fatih/gomodifytags.git /liteide-src/liteidex/src/github.com/fatih/gomodifytags
 RUN QTDIR=/usr/lib/qt5 ./build_linux.sh
 
-FROM golang:1.17-alpine3.14
+FROM golang:1.18-alpine3.14
 
 # Add gosu for easy stepdown from root
-ENV GOSU_VERSION 1.11
+ENV GOSU_VERSION 1.14
 RUN set -ex; \
 	apk add --update --no-cache gnupg; \
 	wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-amd64"; \
