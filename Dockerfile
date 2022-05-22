@@ -1,8 +1,8 @@
-FROM golang:1.17-alpine3.14 AS build
-RUN apk add --update --no-cache git make g++ qt5-qttools qt5-qtbase-dev qt5-qtbase-x11 qt5-qtwebkit xkeyboard-config
-ARG LITEIDE_VERSION=x37.4
-ARG GOTOOLS_VERSION=v1.3.6
-ARG GOCODE_VERSION=v1.3.2
+FROM golang:1.18-alpine3.15 AS build
+RUN apk add --update --no-cache git make g++ qt5-qttools qt5-qtbase-dev qt5-qtbase-x11 qt5-qtwebengine-dev xkeyboard-config
+ARG LITEIDE_VERSION=x38.0
+ARG GOTOOLS_VERSION=v1.3.10
+ARG GOCODE_VERSION=v1.3.4
 ARG GOMODIFYTAGS_VERSION=v1.16.0
 RUN git -c 'advice.detachedHead=false' clone -b "${LITEIDE_VERSION}" --single-branch https://github.com/visualfc/liteide.git /liteide-src
 WORKDIR /liteide-src/build
@@ -14,7 +14,7 @@ RUN git -c 'advice.detachedHead=false' clone -b "${GOCODE_VERSION}" --single-bra
 RUN git -c 'advice.detachedHead=false' clone -b "${GOMODIFYTAGS_VERSION}" --single-branch https://github.com/fatih/gomodifytags.git /liteide-src/liteidex/src/github.com/fatih/gomodifytags
 RUN QTDIR=/usr/lib/qt5 ./build_linux.sh
 
-FROM golang:1.18-alpine3.14
+FROM golang:1.18-alpine3.15
 
 # Add gosu for easy stepdown from root
 ENV GOSU_VERSION 1.14
@@ -30,7 +30,7 @@ RUN set -ex; \
 	gosu nobody true; \
 	apk del --purge gnupg
 
-RUN apk add --update --no-cache qt5-qtbase-x11 qt5-qtwebkit libcanberra-gtk3 adwaita-icon-theme ttf-dejavu git gcc gdb musl-dev linux-headers make bash curl gcompat libc6-compat
+RUN apk add --update --no-cache qt5-qtbase-x11 qt5-qtwebengine libcanberra-gtk3 adwaita-icon-theme ttf-dejavu git gcc gdb musl-dev linux-headers make bash curl gcompat libc6-compat
 COPY --from=build /liteide-src/build/liteide /opt/liteide
 ENV PATH=/go/bin:/usr/local/go/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/liteide/bin \
 	GOROOT=/usr/local/go \
