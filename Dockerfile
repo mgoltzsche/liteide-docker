@@ -1,4 +1,4 @@
-FROM golang:1.18-alpine3.15 AS build
+FROM golang:1.19-alpine3.15 AS build
 RUN apk add --update --no-cache git make g++ qt5-qttools qt5-qtbase-dev qt5-qtbase-x11 qt5-qtwebengine-dev xkeyboard-config
 ARG LITEIDE_VERSION=x38.0
 ARG GOTOOLS_VERSION=v1.3.10
@@ -14,7 +14,7 @@ RUN git -c 'advice.detachedHead=false' clone -b "${GOCODE_VERSION}" --single-bra
 RUN git -c 'advice.detachedHead=false' clone -b "${GOMODIFYTAGS_VERSION}" --single-branch https://github.com/fatih/gomodifytags.git /liteide-src/liteidex/src/github.com/fatih/gomodifytags
 RUN QTDIR=/usr/lib/qt5 ./build_linux.sh
 
-FROM golang:1.18-alpine3.15
+FROM golang:1.19-alpine3.15
 
 # Add gosu for easy stepdown from root
 ENV GOSU_VERSION 1.14
