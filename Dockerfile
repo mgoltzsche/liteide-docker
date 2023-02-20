@@ -39,6 +39,7 @@ ENV PATH=/go/bin:/usr/local/go/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:
 RUN set -ex; \
 	go install golang.org/x/tools/cmd/godoc@v0.6.0; \
 	go install github.com/go-delve/delve/cmd/dlv@v1.20.1; \
+	go install golang.org/x/tools/cmd/guru@v0.6.0; \
 	rm -rf /opt/liteide/home/.cache /go/src/*; \
 	mv /go/bin/* /usr/local/bin/; \
 	rm -rf /go/*
