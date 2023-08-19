@@ -1,6 +1,6 @@
-FROM golang:1.20-alpine3.17 AS build
+FROM golang:1.21-alpine3.18 AS build
 RUN apk add --update --no-cache git make g++ qtchooser qt5-qttools qt5-qtbase-dev qt5-qtbase-x11 qt5-qtwebengine-dev xkeyboard-config
-ARG LITEIDE_VERSION=x38.2.1
+ARG LITEIDE_VERSION=x38.3
 ARG GOTOOLS_VERSION=v1.5.3
 ARG GOCODE_VERSION=v1.5.2
 ARG GOMODIFYTAGS_VERSION=v1.16.0
@@ -14,7 +14,7 @@ RUN git -c 'advice.detachedHead=false' clone -b "${GOCODE_VERSION}" --single-bra
 RUN git -c 'advice.detachedHead=false' clone -b "${GOMODIFYTAGS_VERSION}" --single-branch https://github.com/fatih/gomodifytags.git /liteide-src/liteidex/src/github.com/fatih/gomodifytags
 RUN QTDIR=/usr/lib/qt5 ./build_linux.sh
 
-FROM golang:1.20-alpine3.17
+FROM golang:1.21-alpine3.18
 
 # Add gosu for easy stepdown from root
 ENV GOSU_VERSION 1.14
@@ -37,9 +37,9 @@ ENV PATH=/go/bin:/usr/local/go/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:
 	HOME=/opt/liteide/home \
 	DISPLAY=:0
 RUN set -ex; \
-	go install golang.org/x/tools/cmd/godoc@v0.6.0; \
-	go install github.com/go-delve/delve/cmd/dlv@v1.20.1; \
-	go install golang.org/x/tools/cmd/guru@v0.6.0; \
+	go install golang.org/x/tools/cmd/godoc@v0.12.0; \
+	go install golang.org/x/tools/cmd/guru@v0.12.0; \
+	go install github.com/go-delve/delve/cmd/dlv@v1.21.0; \
 	rm -rf /opt/liteide/home/.cache /go/src/*; \
 	mv /go/bin/* /usr/local/bin/; \
 	rm -rf /go/*
