@@ -1,9 +1,9 @@
-FROM golang:1.21-alpine3.18 AS build
+FROM golang:1.23-alpine3.20 AS build
 RUN apk add --update --no-cache git make g++ qtchooser qt5-qttools qt5-qtbase-dev qt5-qtbase-x11 qt5-qtwebengine-dev xkeyboard-config
 ARG LITEIDE_VERSION=x38.3
-ARG GOTOOLS_VERSION=v1.5.3
+ARG GOTOOLS_VERSION=v1.5.4
 ARG GOCODE_VERSION=v1.5.2
-ARG GOMODIFYTAGS_VERSION=v1.16.0
+ARG GOMODIFYTAGS_VERSION=v1.17.0
 RUN git -c 'advice.detachedHead=false' clone -b "${LITEIDE_VERSION}" --single-branch https://github.com/visualfc/liteide.git /liteide-src
 WORKDIR /liteide-src/build
 RUN ./update_pkg.sh
@@ -14,10 +14,10 @@ RUN git -c 'advice.detachedHead=false' clone -b "${GOCODE_VERSION}" --single-bra
 RUN git -c 'advice.detachedHead=false' clone -b "${GOMODIFYTAGS_VERSION}" --single-branch https://github.com/fatih/gomodifytags.git /liteide-src/liteidex/src/github.com/fatih/gomodifytags
 RUN QTDIR=/usr/lib/qt5 ./build_linux.sh
 
-FROM golang:1.21-alpine3.18
+FROM golang:1.23-alpine3.20
 
 # Add gosu for easy stepdown from root
-ENV GOSU_VERSION 1.14
+ENV GOSU_VERSION 1.17
 RUN set -ex; \
 	apk add --update --no-cache gnupg; \
 	wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-amd64"; \
@@ -37,9 +37,9 @@ ENV PATH=/go/bin:/usr/local/go/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:
 	HOME=/opt/liteide/home \
 	DISPLAY=:0
 RUN set -ex; \
-	go install golang.org/x/tools/cmd/godoc@v0.12.0; \
-	go install golang.org/x/tools/cmd/guru@v0.12.0; \
-	go install github.com/go-delve/delve/cmd/dlv@v1.21.0; \
+	go install golang.org/x/tools/cmd/godoc@v0.25.0; \
+	go install golang.org/x/tools/cmd/guru@v0.19.0; \
+	go install github.com/go-delve/delve/cmd/dlv@v1.23.0; \
 	rm -rf /opt/liteide/home/.cache /go/src/*; \
 	mv /go/bin/* /usr/local/bin/; \
 	rm -rf /go/*
