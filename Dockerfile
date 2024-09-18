@@ -17,7 +17,7 @@ RUN QTDIR=/usr/lib/qt5 ./build_linux.sh
 FROM golang:1.23-alpine3.20
 
 # Add gosu for easy stepdown from root
-ENV GOSU_VERSION 1.17
+ENV GOSU_VERSION=1.17
 RUN set -ex; \
 	apk add --update --no-cache gnupg; \
 	wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-amd64"; \
