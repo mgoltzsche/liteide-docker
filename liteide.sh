@@ -23,9 +23,12 @@ DOCKER_OPT=
 ! ([ -d "$PRJDIR"/.liteide-cache ] || [ "$LITEIDE_CACHE" = on ]) \
 	|| DOCKER_OPT="$DOCKER_OPT -v ${PRJDIR}/.liteide-cache:/go"
 
-$DOCKER run -d --name "liteide-$(basename $PRJDIR)" --rm \
+# Setup xauth
+xhost +local:docker
+
+$DOCKER run --name "liteide-$(basename $PRJDIR)" --rm \
 	--network host \
-	-e DISPLAY="${DISPLAY}" \
+	-e DISPLAY="$DISPLAY" \
 	--mount type=bind,src=/tmp/.X11-unix,dst=/tmp/.X11-unix \
 	--mount type=bind,src=/etc/machine-id,dst=/etc/machine-id \
 	$DOCKER_OPT \
