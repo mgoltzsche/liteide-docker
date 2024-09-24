@@ -26,7 +26,7 @@ DOCKER_OPT=
 # Setup xauth
 xhost +local:docker
 
-$DOCKER run --name "liteide-$(basename $PRJDIR)" --rm \
+$DOCKER run -d --name "liteide-$(basename $PRJDIR)" --rm \
 	--network host \
 	-e DISPLAY="$DISPLAY" \
 	--mount type=bind,src=/tmp/.X11-unix,dst=/tmp/.X11-unix \
