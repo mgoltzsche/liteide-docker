@@ -1,4 +1,4 @@
-FROM golang:1.25.0-alpine3.22 AS golang
+FROM golang:1.25.3-alpine3.22 AS golang
 
 FROM golang AS build
 RUN apk add --update --no-cache git make g++ qtchooser qt5-qttools qt5-qtbase-dev qt5-qtbase-x11 qt5-qtwebengine-dev xkeyboard-config
@@ -41,7 +41,7 @@ ENV PATH=/go/bin:/usr/local/go/bin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:
 RUN set -ex; \
 	go install golang.org/x/tools/cmd/godoc@v0.34.0; \
 	go install golang.org/x/tools/cmd/guru@v0.19.0; \
-	go install github.com/go-delve/delve/cmd/dlv@v1.25.0; \
+	go install github.com/go-delve/delve/cmd/dlv@v1.25.2; \
 	rm -rf /opt/liteide/home/.cache /go/src/*; \
 	mv /go/bin/* /usr/local/bin/; \
 	rm -rf /go/*
