@@ -1,4 +1,4 @@
-FROM golang:1.25.3-alpine3.22 AS golang
+FROM golang:1.25.4-alpine3.22 AS golang
 
 FROM golang AS build
 RUN apk add --update --no-cache git make g++ qtchooser qt5-qttools qt5-qtbase-dev qt5-qtbase-x11 qt5-qtwebengine-dev xkeyboard-config
